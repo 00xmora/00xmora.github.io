@@ -14,13 +14,13 @@ tags:
 - hextree  
 - penetration testing  
 - android security  
+image: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXmYjvkPoTPJk7lEIJpt19Z24OkecfMezJNg&s 
 read_time: 3 minute read
 pin: false
 comments: true
 toc: true
 ---
 
-# Flag28Service AIDL Binding Walkthrough (Hextree Lab)
 
 ## 📌 Lab Objective
 

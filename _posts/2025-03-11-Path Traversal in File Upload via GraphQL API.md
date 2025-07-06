@@ -17,8 +17,6 @@ comments: true
 toc: true
 ---
 
-# Path Traversal in File Upload via GraphQL API
-
 
 ## Summary
 

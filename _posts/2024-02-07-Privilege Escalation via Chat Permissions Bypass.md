@@ -16,27 +16,6 @@ comments: true
 toc: true
 ---
 
----
-title: Path Traversal in File Upload via GraphQL API
-layout: post
-categories: web
-description: A file upload endpoint accepted folder traversal sequences, enabling unauthorized file placement and abuse of signed Google Cloud Storage URLs.
-summary: A file upload endpoint accepted folder traversal sequences, enabling unauthorized file placement and abuse of signed Google Cloud Storage URLs.
-date: 2025-03-11
-tags:
-  - path-traversal
-  - file-upload
-  - graphql
-  - gcp
-  - bug-bounty
-read_time: 3 minute read
-pin: false
-comments: true
-toc: true
----
-
-# Privilege Escalation via Chat Permissions Bypass
-
 Sometimes, what seems like a minor UI restriction hides a deeper flaw — one that lets you step into someone else's shoes.
 
 In this case, I discovered a privilege escalation issue in a platform’s internal messaging system that relied too heavily on UI-level permission enforcement. Here's the story.

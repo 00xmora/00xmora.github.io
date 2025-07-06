@@ -18,10 +18,8 @@ comments: true
 toc: true
 ---
 
-# race condition
-### if you think you know race condition think again!!
+## if you think you know race condition think again!!
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*BBrlBnWl0xWSOnS9IZHxlA.png)
 
 
 السلام عليكم ورحمة الله وبركاته
