@@ -213,3 +213,7 @@ public class HextreeActivity extends AppCompatActivity {
 This lab demonstrates how exported AIDL-based services can become attack surfaces. By reverse engineering the `.aidl`, replicating it, and binding from your own app, you can trigger privileged flows like opening hidden activities or leaking secrets — all by using Binder IPC correctly.
 
 > The power of Android IPC becomes a vulnerability when misconfigured.
+
+---
+thanks for reading.
+If you enjoyed this write-up, feel free to follow me on [Twitter](https://twitter.com/00xmora)

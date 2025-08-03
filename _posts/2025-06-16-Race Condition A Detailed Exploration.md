@@ -4,7 +4,7 @@ layout: post
 categories: research
 description: Learn about race conditions, their types, exploitation techniques, and mitigation strategies.
 date: 2025-06-16
-tags: 
+tags:
   - race-condition
   - security
   - multithreading
@@ -13,7 +13,7 @@ tags:
 summary: A comprehensive guide to understanding and mitigating race conditions in software systems.
 read_time: 9 minute read
 image: https://miro.medium.com/v2/resize:fit:1400/format:webp/1*BBrlBnWl0xWSOnS9IZHxlA.png
-pin: false
+pin: true
 comments: true
 toc: true
 ---
@@ -283,4 +283,5 @@ As with all security mitigations, achieving complete protection against race con
 
 -----
 
-Thanks for reading
+thanks for reading.
+If you enjoyed this write-up, feel free to follow me on [Twitter](https://twitter.com/00xmora)

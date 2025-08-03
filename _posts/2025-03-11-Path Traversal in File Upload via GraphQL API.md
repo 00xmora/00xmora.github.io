@@ -120,6 +120,5 @@ The issue was marked **Informative** due to limited security impact in this cont
 
 ---
 
-Thanks for reading!
-
----
+thanks for reading.
+If you enjoyed this write-up, feel free to follow me on [Twitter](https://twitter.com/00xmora)

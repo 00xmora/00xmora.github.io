@@ -8,14 +8,18 @@ date: 2025-03-24
 read_time: 5 min
 image: https://miro.medium.com/v2/resize:fit:720/format:webp/1*SAY1UW6kMzBqE5t9z7ZNBg.jpeg
 tags:
-  - Type Confusion
-  - Privilege Escalation
+  - Type
+  - Confusion
+  - Privilege
+  - Escalation
   - Security
-  - Bug Bounty
+  - Bug
+  - Bounty
   - CTF
   - Vulnerabilities
-  - Real-World Stories
-pin: false
+  - Real-World
+  - Stories
+pin: true
 comments: true
 toc: true
 ---
@@ -181,3 +185,7 @@ But also a reminder: **even tiny data inconsistencies** can lead to serious vuln
 For every closed report, there's another undiscovered flaw waiting to be found.
 
 Until next time, stay curious, stay ethical, and keep hacking.
+
+---
+thanks for reading.
+If you enjoyed this write-up, feel free to follow me on [Twitter](https://twitter.com/00xmora)

@@ -142,6 +142,6 @@ If you're building or reviewing APIs, **always test your CORS logic** under real
 
 ---
 
-💬 Have you seen similar CORS issues in the wild? Let's connect on [Twitter](https://twitter.com/00xmora), or [LinkedIn](https://linkedin.com/in/00xmora).
+thanks for reading.
+If you enjoyed this write-up, feel free to follow me on [Twitter](https://twitter.com/00xmora)
 
----
