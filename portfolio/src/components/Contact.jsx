@@ -1,7 +1,7 @@
 import './Contact.css';
 
 const LINKS = [
-{ label: 'Email', value: '[omarsselim00@gmail.com](mailto:omarsselim00@gmail.com)', href: 'mailto:omarsselim00@gmail.com' },
+{ label: 'Email', value: 'omarsselim00@gmail.com', href: 'mailto:omarsselim00@gmail.com' },
 { label: 'Book a call', value: 'calendly.com/00xmora', href: 'https://calendly.com/00xmora' },
 { label: 'LinkedIn', value: 'in/00xmora', href: 'https://linkedin.com/in/00xmora' },
 { label: 'GitHub', value: 'github.com/00xmora', href: 'https://github.com/00xmora' },
