@@ -8,6 +8,7 @@ const LINKS = [
 { label: 'Blog', value: '00xmora.github.io', href: 'https://00xmora.github.io' },
 ];
 
+
 export default function Contact() {
   return (
     <section id="contact" className="contact">
