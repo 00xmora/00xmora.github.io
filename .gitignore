@@ -1,28 +1,30 @@
-# Bundler cache
-.bundle
-vendor
-Gemfile.lock
-
-# Jekyll cache
-.jekyll-cache
-.jekyll-metadata
+# --- top-level build output ---
 _site
-
-# RubyGems
-*.gem
-
-# NPM dependencies
 node_modules
-package-lock.json
 
-# IDE configurations
+# --- portfolio (Vite/React) ---
+portfolio/node_modules
+portfolio/dist
+portfolio/.DS_Store
+
+# --- blog (Jekyll) ---
+blog/.bundle
+blog/vendor
+blog/Gemfile.lock
+blog/.jekyll-cache
+blog/.jekyll-metadata
+blog/_site
+blog/*.gem
+blog/node_modules
+blog/package-lock.json
+blog/_sass/vendors
+blog/assets/js/dist
+blog/*.obsidian
+
+# --- editors / OS ---
 .idea
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
 !.vscode/tasks.json
-
-# Misc
-_sass/vendors
-assets/js/dist
-*.obsidian
+.DS_Store

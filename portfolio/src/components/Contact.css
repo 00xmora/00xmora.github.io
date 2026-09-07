@@ -1,0 +1,53 @@
+.contact {
+  padding: 8px 0 60px;
+}
+
+.contact__heading {
+  font-size: clamp(26px, 3.4vw, 38px);
+  margin-top: 20px;
+  max-width: 20ch;
+}
+
+.contact__sub {
+  color: var(--text-dim);
+  max-width: 56ch;
+  margin-top: 16px;
+  font-size: 16px;
+}
+
+.contact__grid {
+  margin-top: 46px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--border-soft);
+}
+
+.contact__link {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--border-soft);
+  transition: padding-left 0.15s ease, color 0.15s ease;
+}
+
+.contact__link:nth-child(odd) { padding-right: 24px; border-right: 1px solid var(--border-soft); }
+.contact__link:nth-child(even) { padding-left: 24px; }
+
+.contact__link:hover { color: var(--accent-soft); padding-left: 10px; }
+
+.contact__label {
+  font-size: 12.5px;
+  color: var(--text-faint);
+}
+
+.contact__value {
+  font-size: 15px;
+  color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .contact__grid { grid-template-columns: 1fr; }
+  .contact__link:nth-child(odd) { padding-right: 4px; border-right: none; }
+  .contact__link:nth-child(even) { padding-left: 4px; }
+}

@@ -1,0 +1,119 @@
+:root {
+  --bg: #0a0d12;
+  --bg-alt: #0e131a;
+  --surface: #141a23;
+  --surface-2: #1a212c;
+  --border: #262f3b;
+  --border-soft: #1d2530;
+  --text: #e9edf3;
+  --text-dim: #97a1b0;
+  --text-faint: #5f6b7c;
+  --accent: #e8a23d;
+  --accent-soft: #f0bc6e;
+  --accent-line: rgba(232, 162, 61, 0.35);
+  --steel: #5c86a3;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --max: 1080px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(232, 162, 61, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 162, 61, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--mono);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+::selection { background: var(--accent); color: #0a0d12; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 20px; }
+}
+
+.mono { font-family: var(--mono); }
+
+.section-tag {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-tag .dash {
+  width: 22px;
+  height: 1px;
+  background: var(--accent-line);
+  display: inline-block;
+}
+
+.page {
+  padding-top: 68px;
+  min-height: calc(100vh - 68px);
+}
+
+.page-head {
+  padding: 64px 0 8px;
+}
+
+.page-head__eyebrow {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-head__eyebrow .dash {
+  width: 22px;
+  height: 1px;
+  background: var(--accent-line);
+  display: inline-block;
+}
+

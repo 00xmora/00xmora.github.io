@@ -1,0 +1,84 @@
+name: Build and Deploy (portfolio + blog)
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - .gitignore
+      - README.md
+      - LICENSE
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # ---- Build the portfolio (React/Vite) -> goes to site root ----
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+
+      - name: Install portfolio deps
+        working-directory: portfolio
+        run: npm ci
+
+      - name: Build portfolio
+        working-directory: portfolio
+        run: npm run build
+
+      # ---- Build the blog (Jekyll/Chirpy) -> goes to /blog ----
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+          working-directory: blog
+
+      - name: Build blog
+        working-directory: blog
+        run: bundle exec jekyll b -d "../_site/blog"
+        env:
+          JEKYLL_ENV: production
+
+      # ---- Assemble: portfolio at root, blog already at /blog ----
+      - name: Assemble combined site
+        run: |
+          mkdir -p _site
+          cp -r portfolio/dist/. _site/
+          touch _site/.nojekyll
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
