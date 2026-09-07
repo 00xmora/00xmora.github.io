@@ -1,13 +1,11 @@
 import './Contact.css';
 
 const LINKS = [
-  { label: 'Email', value: 'omarsselim00@gmail.com', href: 'mailto:omarsselim00@gmail.com' },
-  { label: 'Phone', value: '+20 109 240 9912', href: 'tel:+201092409912' },
-  { label: 'LinkedIn', value: 'in/00xmora', href: 'https://linkedin.com/in/00xmora' },
-  { label: 'GitHub', value: 'github.com/00xmora', href: 'https://github.com/00xmora' },
-  { label: 'HackerOne', value: 'h1/00xmora', href: 'https://hackerone.com/00xmora' },
-  { label: 'Blog', value: '/blog', href: '/blog/' },
-  { label: 'X / Twitter', value: '@00xmora', href: 'https://twitter.com/00xmora' },
+{ label: 'Email', value: '[omarsselim00@gmail.com](mailto:omarsselim00@gmail.com)', href: 'mailto:omarsselim00@gmail.com' },
+{ label: 'Book a call', value: 'calendly.com/00xmora', href: 'https://calendly.com/00xmora' },
+{ label: 'LinkedIn', value: 'in/00xmora', href: 'https://linkedin.com/in/00xmora' },
+{ label: 'GitHub', value: 'github.com/00xmora', href: 'https://github.com/00xmora' },
+{ label: 'Blog', value: '00xmora.github.io', href: 'https://00xmora.github.io' },
 ];
 
 export default function Contact() {
