@@ -1,0 +1,715 @@
+/* ============================================================================
+   Omar Samy — portfolio design system
+   Palette: #0B1120  #151F32  #3B82F6  #60A5FA  #F8FAFC  #94A3B8  #263449
+   Dark theme is the default; light theme is opt-in via [data-theme='light'].
+   ========================================================================= */
+
+/* ---------- tokens: dark (default) ----------
+   Slate-blue palette.
+     #0B1120  primary background      #3B82F6  primary accent
+     #151F32  cards / secondary bg    #60A5FA  accent hover
+     #F8FAFC  primary text            #94A3B8  secondary text
+     #263449  borders
+   Derived steps only fill the gaps between those roles. */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* --- spec colours --- */
+  --bg: #0b1120;
+  --surface: #151f32;
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --text: #f8fafc;
+  --text-dim: #94a3b8;
+  --border: #263449;
+
+  /* --- derived: backgrounds --- */
+  --bg-top: #101a2e;
+  --bg-bottom: #070c17;
+  --bg-alt: #0f1729;
+  --surface-2: #1b2739;
+  --surface-3: #223043;
+
+  /* --- derived: borders --- */
+  --border-soft: #1c2840;
+  --border-strong: #35496a;
+
+  /* --- derived: text --- */
+  --text-faint: #64748b;
+
+  /* --- derived: accent --- */
+  --accent-strong: #2563eb;
+  --accent-pale: #93c5fd;
+  --accent-line: rgb(59 130 246 / 34%);
+  --accent-glow: rgb(59 130 246 / 40%);
+  /* Darker ends for surfaces that carry white text (buttons): #3B82F6 with
+     white is only 3.7:1, so it stays the highlight, not the fill. */
+  --accent-ink: #1d4ed8;
+  --accent-ink-2: #2563eb;
+
+  /* legacy aliases kept so components keep reading one set of names */
+  --electric: var(--accent);
+  --electric-bright: var(--accent-hover);
+  --electric-deep: var(--accent-strong);
+  --electric-soft: var(--accent-pale);
+  --electric-ink: var(--accent-ink);
+  --electric-ink-2: var(--accent-ink-2);
+  --blue-pale: var(--accent-pale);
+  --blue-soft: #7aa9f8;
+  --blue: var(--accent-strong);
+
+  /* gradients */
+  --grad: linear-gradient(112deg, #dbeafe 0%, #93c5fd 26%, #60a5fa 56%, #3b82f6 84%, #2563eb 100%);
+  --grad-vivid: linear-gradient(112deg, var(--accent-ink) 0%, var(--accent-ink-2) 100%);
+  --grad-deep: linear-gradient(112deg, var(--accent) 0%, #4f7cf5 55%, #6d5cf0 100%);
+  --grad-soft: linear-gradient(150deg, rgb(59 130 246 / 14%) 0%, rgb(148 163 184 / 6%) 45%, transparent 80%);
+  --grad-bg: linear-gradient(180deg, var(--bg-top) 0%, #0d1527 38%, var(--bg) 68%, var(--bg-bottom) 100%);
+  --grad-card: linear-gradient(155deg, #1b2739 0%, #151f32 40%, #111a2b 100%);
+  --grad-tag: linear-gradient(120deg, rgb(59 130 246 / 10%), rgb(96 165 250 / 12%));
+
+  /* gradient border stops — both ends are the accent so the ring is always
+     visible against the page (the spec border #263449 is only 1.5:1, so it is
+     used for hairlines *inside* a surface, never as the card outline) */
+  --border-grad: linear-gradient(140deg, rgb(59 130 246 / 85%), rgb(96 165 250 / 55%) 55%, rgb(59 130 246 / 80%));
+
+  /* status */
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --danger: #f87171;
+
+  /* terminal — always black, declared in :root below */
+  --term-bg: #000;
+  --term-bg-2: #0a0a0c;
+
+  /* misc */
+  --grid-line: rgb(148 163 184 / 7%);
+  --shadow:
+    0 1px 2px rgb(0 0 0 / 40%),
+    0 14px 34px -14px rgb(0 0 0 / 70%);
+  --shadow-glow:
+    0 0 0 1px rgb(59 130 246 / 22%),
+    0 20px 55px -22px rgb(59 130 246 / 55%),
+    0 0 90px -44px rgb(37 99 235 / 55%);
+  --selection-bg: var(--accent);
+  --selection-fg: #0b1120;
+
+  /* aurora wash stops — restrained, so the page reads as one flat slate */
+  --aurora-1: rgb(59 130 246 / 22%);
+  --aurora-2: rgb(96 165 250 / 14%);
+  --aurora-3: rgb(37 99 235 / 20%);
+  --aurora-4: rgb(148 163 184 / 10%);
+}
+
+/* ---------- tokens: light ---------- */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f3f7ff;
+  --bg-alt: #e6efff;
+  --surface: #ffffff;
+  --surface-2: #eaf1ff;
+  --surface-3: #dbe7ff;
+
+  --border: #c3d5f7;
+  --border-soft: #d9e5fb;
+  --border-strong: #9db8ef;
+
+  --text: #091540;
+  --text-dim: #33468c;
+  --text-faint: #6b7ba8;
+
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-pale: #3b82f6;
+  --accent-line: rgb(37 99 235 / 26%);
+  --accent-glow: rgb(37 99 235 / 20%);
+
+  --grad: linear-gradient(120deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+
+  --ok: #0f9d63;
+  --warn: #b8770a;
+  --danger: #d92b3f;
+
+  /* terminal — kept dark on purpose; the real values live in :root below. */
+  --term-bg: #000;
+  --term-bg-2: #0a0a0c;
+
+  --grid-line: rgb(37 99 235 / 7%);
+  --shadow:
+    0 1px 2px rgb(9 21 64 / 6%),
+    0 14px 34px -16px rgb(9 21 64 / 26%);
+  --shadow-glow: 0 0 0 1px rgb(37 99 235 / 12%), 0 18px 40px -22px rgb(37 99 235 / 45%);
+  --selection-bg: var(--blue);
+  --selection-fg: #ffffff;
+}
+
+/* ---------- base ---------- */
+:root {
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --max: 1120px;
+  --radius: 14px;
+  --radius-sm: 9px;
+  --nav-h: 68px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---------- the terminal is always a black terminal ----------
+     Declared here (not in a theme block) so it stays black in light mode too. */
+  --term-bg: #000;
+  --term-bg-2: #0a0a0c;
+  --term-panel: #08080a;
+  --term-panel-2: #030304;
+  --term-text: #e6ecff;
+  --term-dim: #7a86b0;
+  --term-prompt: #4d94ff;
+  --term-cmd: #bcd9ff;
+  --term-ok: #3ddc97;
+  --term-err: #ff6b81;
+  --term-grad: linear-gradient(158deg, #16161d 0%, #0c0c10 34%, #040405 70%, #000 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  background-image: var(--grad-bg);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+[data-theme='light'] body {
+  background-image: linear-gradient(180deg, #ffffff 0%, var(--bg) 42%, var(--bg-alt) 100%);
+}
+
+/* ambient background: aurora wash + technical grid */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* A second aurora layer, so the wash reads as mixed colour rather than one hue. */
+body::before {
+  inset: -20% -10%;
+  z-index: 0;
+  background:
+    radial-gradient(30rem 22rem at 78% 62%, var(--aurora-4), transparent 62%),
+    radial-gradient(26rem 20rem at 30% 88%, var(--aurora-2), transparent 60%),
+    radial-gradient(34rem 26rem at 62% 22%, var(--aurora-1), transparent 64%);
+  filter: blur(26px);
+  opacity: 0.75;
+  animation: aurora 30s var(--ease) infinite alternate-reverse;
+}
+
+/* The technical grid sits above the wash. */
+body::after {
+  inset: 0;
+  z-index: 0;
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, black 30%, transparent 88%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, black 30%, transparent 88%);
+}
+
+/* Deep colour pools for the main wash. */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(42rem 30rem at 10% 6%, var(--aurora-3), transparent 62%),
+    radial-gradient(34rem 26rem at 90% 2%, var(--aurora-1), transparent 60%),
+    radial-gradient(46rem 34rem at 50% 104%, var(--aurora-2), transparent 66%);
+  filter: blur(14px);
+  animation: aurora 26s var(--ease) infinite alternate;
+}
+
+[data-theme='light'] .aurora {
+  background:
+    radial-gradient(42rem 30rem at 10% 6%, rgb(59 130 246 / 34%), transparent 62%),
+    radial-gradient(34rem 26rem at 90% 2%, rgb(171 210 250 / 46%), transparent 60%),
+    radial-gradient(46rem 34rem at 50% 104%, rgb(37 99 235 / 14%), transparent 66%);
+  filter: blur(18px);
+  opacity: 0.85;
+}
+
+@keyframes aurora {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-2%, 2%, 0) scale(1.06);
+  }
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1.02);
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--mono);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 99px;
+  border: 2px solid var(--bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--blue-soft);
+}
+
+/* ---------- layout helpers ---------- */
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.mono {
+  font-family: var(--mono);
+}
+
+.page {
+  padding-top: var(--nav-h);
+  min-height: calc(100vh - var(--nav-h));
+  position: relative;
+  z-index: 1;
+}
+
+.page-head {
+  padding: 72px 0 8px;
+}
+
+.page-head__eyebrow,
+.section-tag {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-head__eyebrow .dash,
+.section-tag .dash {
+  width: 24px;
+  height: 1px;
+  background: var(--accent-line);
+  display: inline-block;
+  flex: none;
+}
+
+.page-head h1 {
+  font-size: clamp(30px, 4.6vw, 44px);
+  margin: 18px 0 14px;
+}
+
+.page-head__lede {
+  color: var(--text-dim);
+  max-width: 68ch;
+  font-size: 16.5px;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  --btn-bd: var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--btn-bd);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.18s var(--ease), box-shadow 0.25s var(--ease),
+    background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn--primary {
+  --btn-bg: var(--grad-vivid);
+  --btn-fg: #fff;
+  --btn-bd: transparent;
+  font-weight: 600;
+  box-shadow: 0 10px 26px -14px rgb(59 130 246 / 90%);
+}
+
+.btn--primary:hover {
+  --btn-bg: linear-gradient(112deg, #1b42b8 0%, var(--accent-ink-2) 100%);
+  box-shadow:
+    0 16px 36px -14px rgb(59 130 246 / 80%),
+    0 0 60px -24px rgb(37 99 235 / 70%);
+}
+
+.btn--ghost {
+  --btn-bd: var(--border-strong);
+}
+
+.btn--ghost:hover {
+  --btn-bd: var(--blue-soft);
+  --btn-fg: var(--accent-pale);
+  background: rgb(59 130 246 / 8%);
+}
+
+.btn--sm {
+  padding: 9px 16px;
+  font-size: 13px;
+}
+
+/* ---------- cards ---------- */
+.card {
+  background: var(--grad-card);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: 26px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.25s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+/* Gradient hairline: a masked border layer that fades around the corner. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--border-grad);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Soft colour bloom, revealed on hover. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--grad-soft);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- chips / tags ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 5px 11px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--grad-tag);
+  color: var(--accent-pale);
+  white-space: nowrap;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.chip:hover {
+  border-color: rgb(59 130 246 / 45%);
+  color: var(--text);
+}
+
+/* Section eyebrows pick up the gradient on their accent run. */
+.section-tag,
+.page-head__eyebrow {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.section-tag .dash,
+.page-head__eyebrow .dash {
+  -webkit-text-fill-color: initial;
+  background: var(--grad);
+  opacity: 0.85;
+}
+
+/* Cards reused as links (quicklinks, post cards, contact cards). */
+.quicklink,
+.contact-card,
+.latest__card {
+  border: 1px solid transparent;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Coloured pools that make the surface read as lit rather than flat. */
+.card,
+.quicklink,
+.contact-card,
+.latest__card,
+.posts__li {
+  background-image:
+    radial-gradient(26rem 13rem at 8% -6%, rgb(59 130 246 / 26%), transparent 66%),
+    radial-gradient(22rem 12rem at 96% 108%, rgb(59 130 246 / 14%), transparent 68%),
+    var(--grad-card);
+  background-color: transparent;
+}
+
+[data-theme='light'] .card,
+[data-theme='light'] .quicklink,
+[data-theme='light'] .contact-card,
+[data-theme='light'] .latest__card,
+[data-theme='light'] .posts__li {
+  background-image:
+    radial-gradient(26rem 13rem at 8% -6%, rgb(59 130 246 / 14%), transparent 66%),
+    radial-gradient(22rem 12rem at 96% 108%, rgb(37 99 235 / 7%), transparent 68%),
+    linear-gradient(155deg, #ffffff 0%, #f4f8ff 55%, #e9f1ff 100%);
+}
+
+.quicklink::before,
+.contact-card::before,
+.latest__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--border-grad);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.quicklink > *,
+.latest__card > *,
+.contact-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.quicklink:hover::before,
+.contact-card:hover::before,
+.latest__card:hover::before {
+  opacity: 1;
+}
+
+/* NOTE: .posts__li is intentionally excluded above — its ::before is the
+   left accent bar, defined in blog.css, not a gradient border. */
+
+/* ---------- gradient text ---------- */
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ---------- scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  will-change: opacity, transform;
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- a11y ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 200;
+  background: var(--blue);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--mono);
+  font-size: 13px;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 640px) {
+  .wrap {
+    padding: 0 20px;
+  }
+
+  .page-head {
+    padding: 48px 0 8px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body::after {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

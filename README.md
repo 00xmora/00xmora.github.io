@@ -1,104 +1,150 @@
 # 00xmora.github.io
 
-This repo builds **two sites from one repo** and deploys them together to
-GitHub Pages:
+Omar Samy's portfolio and technical writeups — **one Astro site, one build, one deploy**.
 
-- **`/`** — Omar Samy's portfolio (React + Vite), source in [`portfolio/`](portfolio)
-- **`/blog/`** — the existing technical blog (Jekyll + Chirpy theme), source in [`blog/`](blog)
+- **`/`** — the portfolio (hero, about, services, experience, skills, contact)
+- **`/writeups/`** — all writeups with a live filter
+- **`/posts/<slug>/`** — the articles themselves
+- **`/tags/`, `/categories/`, `/archives/`** — taxonomy and archive
+- **`/feed.xml`**, **`/posts.json`**, **`/sitemap-index.xml`** — generated feeds and indexes
+- **`/blog/*`** — redirect stubs preserving every URL the old Jekyll blog published
 
-A single GitHub Actions workflow ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml))
-builds both and deploys them as one site on every push to `main`:
-`https://00xmora.github.io/` for the portfolio, `https://00xmora.github.io/blog/`
-for the blog.
+## Stack
 
-## ⚠️ Migrating your existing `00xmora.github.io` repo — read first
+| Concern | Choice |
+|---|---|
+| Framework | [Astro](https://astro.build) 5, fully static output |
+| Interactive bits | React 19, used only for the terminal (one island) |
+| Syntax highlighting | Shiki, at build time — no client-side highlighter |
+| Styling | Plain CSS with custom properties. No Tailwind, no CSS-in-JS |
+| Content | Markdown in `content/posts/` with Zod-validated front matter |
+| Hosting | GitHub Pages via GitHub Actions |
 
-Your blog currently lives at the **root** of the `00xmora/00xmora.github.io`
-repo. This restructuring moves that same content into a `blog/` subfolder
-(with `baseurl: "/blog"` set in `blog/_config.yml`) and adds the portfolio
-alongside it. Because this changes the repo layout significantly, do this
-carefully:
+There is **no Ruby, no Jekyll, no Bundler** anywhere in this project. `npm run build` produces the entire site into `dist/`.
 
-1. **Back up first.** Your existing repo already has everything in git
-   history, so nothing is lost — but it's worth keeping a local clone of
-   the current state before you overwrite anything, just in case.
+## Commands
 
-2. **Clone your real repo fresh** (a clean copy, not this download):
-   ```bash
-   git clone https://github.com/00xmora/00xmora.github.io.git
-   cd 00xmora.github.io
-   ```
-
-3. **Delete everything except `.git`**, then copy in the contents of this
-   package:
-   ```bash
-   find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-   # then copy every file/folder from this download into this directory,
-   # so you end up with: portfolio/, blog/, .github/, .gitignore, .gitmodules, README.md
-   ```
-   The `blog/` folder here already contains your existing posts, theme
-   config, and assets — copied as-is from your current repo, with only
-   `_config.yml`'s `baseurl` changed to `"/blog"`.
-
-4. **Re-link the theme's static-assets submodule** (its path changed from
-   `assets/lib` to `blog/assets/lib`):
-   ```bash
-   git submodule deinit -f assets/lib 2>/dev/null || true
-   git rm -f assets/lib 2>/dev/null || true
-   git submodule add https://github.com/cotes2020/chirpy-static-assets.git blog/assets/lib
-   ```
-   (If `git submodule add` complains the path already exists from the copy
-   step above, delete `blog/assets/lib` first, then run the command again.)
-
-5. **Commit and push:**
-   ```bash
-   git add -A
-   git commit -m "Restructure: portfolio at root, blog moved to /blog"
-   git push
-   ```
-
-6. **In GitHub → repo Settings → Pages**, confirm **Source** is set to
-   **GitHub Actions** (it may already be, from the blog's previous Chirpy
-   workflow). Then check the **Actions** tab — the new combined workflow
-   will run automatically and deploy both sites together.
-
-7. **Google Search Console**: your site-verification file
-   (`googlefb1f3b853a05bcd1.html`) is now served from the portfolio at
-   `portfolio/public/`, so it still resolves at
-   `https://00xmora.github.io/googlefb1f3b853a05bcd1.html` — no re-verification
-   should be needed. Worth double-checking in Search Console after deploy
-   either way.
-
-## A note on limits here
-
-I restructured and reconfigured everything (moved your blog into `blog/`,
-updated its `baseurl`, rewired the submodule path, wrote the combined
-workflow) but **could not build or preview the Jekyll blog myself** in this
-environment — it doesn't have access to RubyGems. The config changes are
-standard Jekyll/Chirpy practice (this is exactly what `baseurl` is for), but
-it's worth watching the first Actions run closely and fixing anything that
-comes up. If the build fails, paste me the Actions log and I'll help debug it.
-
-## Local development
-
-**Portfolio:**
 ```bash
-cd portfolio
 npm install
-npm run dev
+npm run dev      # local dev server
+npm run build    # full static build into dist/
+npm run preview  # serve the built output
 ```
 
-**Blog** (requires Ruby/Bundler):
-```bash
-cd blog
-bundle install
-bundle exec jekyll serve --baseurl ""
+## Writing a post
+
+Create `content/posts/YYYY-MM-DD-Your Title Here.md`:
+
+```markdown
+---
+title: Your Title Here
+date: 2025-08-03
+categories: web
+tags:
+  - rce
+  - file-upload
+description: One or two sentences used for the listing, SEO and the RSS feed.
+image: https://example.com/cover.png
+---
+
+Body in plain CommonMark. Code fences get highlighted automatically.
 ```
-(Serving locally with an empty `--baseurl` override is easiest so links
-resolve at `http://localhost:4000` instead of `http://localhost:4000/blog`.)
 
-## Editing content
+The filename drives the URL. `2025-08-03-Node.js Arbitrary File Upload.md`
+becomes `/posts/Node.js-Arbitrary-File-Upload/`.
 
-- Portfolio text/pages: see `portfolio/src/components/` and `portfolio/src/pages/`
-- Blog posts: add markdown files to `blog/_posts/`, same as before
-- Site-wide colors/fonts for the portfolio: `portfolio/src/index.css`
+> **Do not add a `date` prefix to the title in front matter** and do not change
+> an existing filename unless you also add a redirect — the URL is the filename,
+> and these URLs are indexed by search engines.
+
+## How URLs stay stable
+
+This matters more than it looks. The blog has been served under three different
+URL shapes over the years:
+
+1. `/posts/<Title-With-Hyphens>/` — the original, and what Google indexed
+2. `/blog/posts/<Title-With-Hyphens>/` — after the blog moved under `/blog/`
+3. `/blog/posts/<Title-With-%CE%93%C3%87%C3%B4-...>/` — three posts whose
+   en-dashes were mangled in an earlier commit
+
+The current build makes shape **(1)** canonical again, exactly as it was before,
+and `src/pages/blog/` emits redirect stubs so shapes (2) and (3) still resolve.
+`src/lib/slug.js` reproduces the original slug rule and strips the mojibake, so
+the generated URLs are clean.
+
+If you ever rename a post file, add an entry to `redirects` in
+`astro.config.mjs` so the old URL keeps working.
+
+## Project layout
+
+```
+content/posts/          writeup markdown (the only files you normally edit)
+public/                 static assets served as-is (images, robots.txt, .nojekyll)
+src/
+  components/           Nav, Footer, Hero, PostCard + Terminal.jsx (React island)
+  data/profile.js       single source of truth for bio, skills, roles, links
+  layouts/BaseLayout    <head>, SEO/OG meta, theme bootstrap, nav + footer
+  lib/
+    blog.js             content-collection → post objects, grouping, stats
+    slug.js             slug rules + legacy URL handling
+    posts.js            terminal's post index loader with offline fallback
+  pages/                one file per route
+  styles/               global tokens + per-surface CSS
+astro.config.mjs        site URL, integrations, redirects, markdown config
+```
+
+## Theming
+
+Dark is the default. The palette is a slate-blue system:
+
+| Token | Value | Role |
+|---|---|---|
+| `--bg` | `#0B1120` | primary background |
+| `--surface` | `#151F32` | cards / secondary background |
+| `--accent` | `#3B82F6` | primary accent |
+| `--accent-hover` | `#60A5FA` | accent hover |
+| `--text` | `#F8FAFC` | primary text |
+| `--text-dim` | `#94A3B8` | secondary text |
+| `--border` | `#263449` | borders / hairlines |
+
+Everything else is a derived step that fills the gaps between those roles
+(`--bg-top`, `--surface-2`, `--border-strong`, `--accent-ink`, …). Two deliberate
+departures from a literal reading of that spec:
+
+- **Buttons never fill with `#3B82F6`.** White on it is 3.68:1 — below AA for
+  14px text — so button gradients run `#1B42B8 → #2563EB` (8.3:1 → 5.2:1).
+  `#3B82F6` stays the accent for text, icons and focus, where it hits 5.12:1.
+- **`#263449` is used for hairlines *inside* a surface, not as the card
+  outline.** At 1.5:1 against the background it is invisible as a boundary, so
+  cards are outlined with a gradient ring built from `#3B82F6`/`#60A5FA`, which
+  composites to 3.9:1 and 5.4:1 — visible without introducing any colour that
+  isn't already in the palette.
+
+Contrast summary: primary text 18:1, secondary text 7.3:1, accent text 5.1:1,
+button text 5.2:1 — all AA or better.
+
+Resolution order at load: `?theme=light` / `?theme=dark` in the URL → stored
+choice in `localStorage` → OS `prefers-color-scheme` → dark. Everything reads
+from CSS custom properties in `src/styles/global.css`, so changing the palette
+means editing that one block. The terminal stays pure black in **both** themes,
+the way a real terminal window does — those tokens live in `:root`, not in a
+theme block.
+
+## The terminal
+
+`src/components/Terminal.jsx` is the only hydrated React component on the site.
+It answers `help`, `whoami`, `about`, `skills`, `experience`, `certs`,
+`services`, `posts <query>`, `contact`, `social`, `resume`, `status`, `theme`,
+`sudo hire-me`, `cat`, `echo`, `date`, `pwd`, `ls`, and `clear`. Output for the
+`posts` command is backed by `/posts.json`, generated at build time from the
+content collection, so it can never list a post that does not exist.
+
+**The toolkit lives here.** There is no Skills page: `skills` lists the groups
+and `certs` lists certifications plus education. The nav is deliberately short
+(About / Services / Experience / Blog) and `/skills/` redirects to `/about/`.
+
+## Deploy
+
+`git push` to `main`. `.github/workflows/deploy.yml` installs, runs
+`npm run build`, and publishes `dist/` to GitHub Pages. No other build steps,
+no submodules, no Ruby toolchain.

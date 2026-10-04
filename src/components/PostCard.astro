@@ -1,0 +1,42 @@
+---
+/**
+ * One writeup in a listing. Used by /posts/, tag pages, category pages and
+ * the archive so every listing renders identically.
+ */
+import { formatDate } from '../lib/slug.js';
+
+const { post, showThumb = true } = Astro.props;
+---
+
+<li class="posts__li">
+  <a class="post-card" href={post.url}>
+    <div class="post-card__main">
+      <h2 class="post-card__title">{post.title}</h2>
+      {post.description && <p class="post-card__desc">{post.description}</p>}
+
+      <div class="post-card__meta">
+        <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
+        {post.categories.length > 0 && (
+          <>
+            <span class="post-card__dot" aria-hidden="true">·</span>
+            <span>{post.categories.join(', ')}</span>
+          </>
+        )}
+        {post.tags.length > 0 && (
+          <>
+            <span class="post-card__dot" aria-hidden="true">·</span>
+            <span>{post.tags.slice(0, 3).join(' · ')}</span>
+          </>
+        )}
+      </div>
+    </div>
+
+    {showThumb && post.image && (
+      <span class="post-card__thumb">
+        <img src={post.image} alt="" loading="lazy" decoding="async" />
+      </span>
+    )}
+
+    <span class="post-card__arrow" aria-hidden="true">→</span>
+  </a>
+</li>

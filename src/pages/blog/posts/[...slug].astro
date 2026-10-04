@@ -1,0 +1,65 @@
+---
+/**
+ * Legacy URL preservation for /blog/posts/<slug>/.
+ *
+ * The blog used to live under /blog/, so every post had two live URLs over
+ * time. Each one now gets a real, crawlable redirect stub to its canonical
+ * /posts/<slug>/ home — so old links, bookmarks and search results keep
+ * working instead of 404ing.
+ *
+ * This covers ALL posts, including the three whose slugs still carry mojibake
+ * en-dashes in the URLs Google indexed.
+ */
+import { getPosts } from '../../../lib/blog.js';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+
+  const targets = posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { to: post.url },
+  }));
+
+  // Mojibake variants of the three affected slugs, as they were published.
+  const mojibake = [
+    {
+      slug: 'Exploiting-Flag26Service-%CE%93%C3%87%C3%B4-Android-Messenger-Based-Service-%28Hextree-CTF%29',
+      to: '/posts/Exploiting-Flag26Service-Android-Messenger-Based-Service-(Hextree-CTF)/',
+    },
+    {
+      slug: 'SpEL-Injection-Exploit-%CE%93%C3%87%C3%B4-AppSec-Master-Challenge-Writeup',
+      to: '/posts/SpEL-Injection-Exploit-AppSec-Master-Challenge-Writeup/',
+    },
+    {
+      slug: 'Node.js-Arbitrary-File-Upload-to-RCE-%CE%93%C3%87%C3%B4-AppSec-Master-Challenge-Writeup',
+      to: '/posts/Node.js-Arbitrary-File-Upload-to-RCE-AppSec-Master-Challenge-Writeup/',
+    },
+  ];
+
+  const seen = new Set(targets.map((t) => t.params.slug));
+  mojibake.forEach((m) => {
+    if (!seen.has(m.slug)) targets.push({ params: { slug: m.slug }, props: { to: m.to } });
+  });
+
+  return targets;
+}
+
+const { to } = Astro.props;
+const target = new URL(to, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting to {to}</title>
+    <meta http-equiv="refresh" content={`0;url=${to}`} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={target} />
+  </head>
+  <body>
+    <p>
+      This writeup moved. <a href={to}>Continue to {to}</a>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { experience, profile } from '../data/profile.js';
+---
+
+<BaseLayout
+  title="Experience — Omar Samy"
+  description="Cybersecurity Engineer and Presales Engineer at Prosoft, previously Offensive Security Engineer at Security Meter."
+>
+  <div class="page">
+    <div class="page-head">
+      <div class="wrap">
+        <p class="page-head__eyebrow">
+          <span class="dash" aria-hidden="true"></span>
+          Experience
+        </p>
+
+        <h1 id="experience-title">Where this comes from</h1>
+
+        <p class="page-head__lede">
+          Two sides of the same discipline: selling security solutions honestly,
+          and having spent enough time breaking systems to know what that
+          actually requires.
+        </p>
+      </div>
+    </div>
+
+    <section class="exp-section wrap" aria-labelledby="experience-title">
+      <ul class="exp-list reveal">
+        {experience.map((role) => (
+          <li class="exp-item">
+            <p class="exp-period mono">{role.period}</p>
+            <div class="exp-body">
+              <h2 class="exp-title">{role.title}</h2>
+              <p class="exp-org mono">{role.org}</p>
+              <ul class="exp-points">
+                {role.points.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="page-cta wrap reveal" aria-labelledby="exp-cta-title">
+      <div class="page-cta__body">
+        <h2 class="page-cta__title" id="exp-cta-title">Want the full history?</h2>
+        <p class="page-cta__meta mono">
+          <span>{profile.location}</span>
+          <span class="page-cta__sep" aria-hidden="true">/</span>
+          <span>{profile.remote}</span>
+        </p>
+      </div>
+
+      <div class="page-cta__actions">
+        <a class="btn btn--primary" href={`mailto:${profile.email}?subject=CV%20request`}>Request my CV</a>
+        <a class="btn btn--ghost" href="/about/">See the toolkit</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

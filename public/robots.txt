@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The error page is served with a 404 status; keep it out of the index.
+Disallow: /404.html
+
+Sitemap: https://00xmora.github.io/sitemap-index.xml

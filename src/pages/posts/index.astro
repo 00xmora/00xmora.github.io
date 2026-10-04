@@ -1,0 +1,47 @@
+---
+/**
+ * /posts/ — the writeups index.
+ * Every writeup is listed newest-first on one page; the per-page pagination the
+ * old theme used produced duplicate content, so it is intentionally dropped.
+ */
+import { getPosts, stats } from '../../lib/blog.js';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const posts = await getPosts();
+const s = stats(posts);
+---
+
+<BaseLayout
+  title="Blog — Omar Samy"
+  description={`${s.posts} technical writeups on application security, CTFs, Android reversing and vulnerability research.`}
+>
+  <div class="blog">
+    <div class="blog__wrap">
+      <header class="blog-head">
+        <div class="section-tag">
+          <span class="dash" aria-hidden="true"></span>
+          Writeups
+        </div>
+        <h1 class="blog-head__title">Breaking apps, not hearts</h1>
+        <p class="blog-head__lede">
+          Code reviews, CTF solutions, and vulnerability research — written up while the details
+          were still fresh. {s.posts} posts across {s.categories} categories.
+        </p>
+
+        <div class="blog-head__meta">
+          <a class="chip mono" href="/tags/">Tags</a>
+          <a class="chip mono" href="/categories/">Categories</a>
+          <a class="chip mono" href="/archives/">Archive</a>
+          <a class="chip mono" href="/feed.xml">RSS ↗</a>
+        </div>
+      </header>
+
+      <ul class="posts">
+        {posts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

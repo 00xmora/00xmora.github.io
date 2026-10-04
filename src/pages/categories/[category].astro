@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts } from '../../lib/blog.js';
+import { slugifyTag } from '../../lib/slug.js';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+
+  // One page per category. Category names are matched case-insensitively.
+  const buckets = new Map();
+  posts.forEach((post) => {
+    post.categories.forEach((category) => {
+      const slug = slugifyTag(category);
+      if (!buckets.has(slug)) buckets.set(slug, { label: category, posts: [] });
+      buckets.get(slug).posts.push(post);
+    });
+  });
+
+  return [...buckets.entries()].map(([slug, bucket]) => ({
+    params: { category: slug },
+    props: { label: bucket.label, posts: bucket.posts },
+  }));
+}
+
+const { label, posts } = Astro.props;
+---
+
+<BaseLayout title={`${label} — Omar Samy`} description={`Writeups in the ${label} category.`}>
+  <div class="blog">
+    <div class="blog__wrap">
+      <header class="blog-head">
+        <div class="section-tag">
+          <span class="dash" aria-hidden="true"></span>
+          Category
+        </div>
+        <h1 class="blog-head__title">{label}</h1>
+        <p class="blog-head__lede">
+          {posts.length} writeup{posts.length === 1 ? '' : 's'} in this category.
+        </p>
+        <div class="blog-head__meta">
+          <a class="chip mono" href="/posts/">All writeups</a>
+          <a class="chip mono" href="/categories/">All categories</a>
+        </div>
+      </header>
+
+      <ul class="posts">
+        {posts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

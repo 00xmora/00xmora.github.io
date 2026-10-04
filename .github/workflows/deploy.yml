@@ -1,4 +1,4 @@
-name: Build and Deploy (portfolio + blog)
+name: Build and Deploy (portfolio + writeups)
 
 on:
   push:
@@ -26,52 +26,30 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: true
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      # ---- Build the portfolio (React/Vite) -> goes to site root ----
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: portfolio/package-lock.json
 
-      - name: Install portfolio deps
-        working-directory: portfolio
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build portfolio
-        working-directory: portfolio
+      # One command builds the whole site: the portfolio at /, the writeups at
+      # /posts/, plus tags, categories, archive, RSS, sitemap and posts.json.
+      - name: Build site
         run: npm run build
-
-      # ---- Build the blog (Jekyll/Chirpy) -> goes to /blog ----
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.3
-          bundler-cache: true
-          working-directory: blog
-
-      - name: Build blog
-        working-directory: blog
-        run: bundle exec jekyll b -d "../_site/blog"
         env:
-          JEKYLL_ENV: production
+          NODE_ENV: production
 
-      # ---- Assemble: portfolio at root, blog already at /blog ----
-      - name: Assemble combined site
-        run: |
-          mkdir -p _site
-          cp -r portfolio/dist/. _site/
-          touch _site/.nojekyll
+      - name: Add .nojekyll
+        run: touch dist/.nojekyll
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: dist
 
   deploy:
     needs: build

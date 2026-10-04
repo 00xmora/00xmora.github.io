@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, groupBy } from '../../lib/blog.js';
+
+const posts = await getPosts();
+const categories = groupBy(posts, 'categories');
+---
+
+<BaseLayout title="Categories — Omar Samy" description="Browse writeups by category.">
+  <div class="blog">
+    <div class="blog__wrap">
+      <header class="blog-head">
+        <div class="section-tag">
+          <span class="dash" aria-hidden="true"></span>
+          Categories
+        </div>
+        <h1 class="blog-head__title">Browse by category</h1>
+        <p class="blog-head__lede">Writeups grouped by the kind of work they came out of.</p>
+        <div class="blog-head__meta">
+          <a class="chip mono" href="/posts/">All writeups</a>
+          <a class="chip mono" href="/tags/">Tags</a>
+        </div>
+      </header>
+
+      <ul class="tax-list">
+        {categories.map((category) => (
+          <li class="tax-item">
+            <a href={`/categories/${category.slug}/`}>
+              <span>{category.label}</span>
+              <span class="tax-item__count">{category.count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { links, profile } from '../data/profile.js';
+
+const isExternal = (href) => href.startsWith('http');
+---
+
+<BaseLayout
+  title="Contact — Omar Samy"
+  description="Get in touch about application security evaluations, proof-of-concept scoping, or a technical second opinion."
+>
+  <div class="page">
+    <div class="page-head">
+      <div class="wrap">
+        <p class="page-head__eyebrow">
+          <span class="dash" aria-hidden="true"></span>
+          Contact
+        </p>
+
+        <h1 id="contact-title">Let's talk about your evaluation</h1>
+
+        <p class="page-head__lede">
+          Whether you're scoping a PoC, comparing AppSec vendors, or just want a
+          second technical opinion — I'm glad to help.
+        </p>
+      </div>
+    </div>
+
+    <section class="contact-section wrap" aria-labelledby="contact-title">
+      <p class="contact-bio reveal">{profile.bio}</p>
+
+      <ul class="contact-grid reveal">
+        {links.map((link) => (
+          <li>
+            <a
+              class="card contact-card"
+              href={link.href}
+              {...isExternal(link.href) ? { target: '_blank', rel: 'noreferrer' } : {}}
+            >
+              <span class="contact-card__label mono">{link.label}</span>
+              <span class="contact-card__value">{link.value}</span>
+              <span class="contact-card__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="contact-cta reveal">
+        <p class="contact-cta__note mono">
+          {profile.availability} · {profile.remote} · {profile.location}
+        </p>
+        <a class="btn btn--primary" href={`mailto:${profile.email}`}>Email me directly</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

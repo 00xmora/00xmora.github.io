@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { aboutPoints, profile } from '../data/profile.js';
+---
+
+<BaseLayout title="About — Omar Samy" description={profile.bio} image="/assets/img/omar.jpg">
+  <div class="page">
+    <div class="page-head">
+      <div class="wrap">
+        <p class="page-head__eyebrow">
+          <span class="dash" aria-hidden="true"></span>
+          About
+        </p>
+
+        <h1 id="about-title">Presales that respects both sides of the table</h1>
+
+        <p class="page-head__lede">
+          I'm a cybersecurity professional working as a Presales Engineer,
+          helping organizations strengthen their security posture and adopt
+          modern application security practices. That covers technical
+          consultations, solution design, product demos and PoCs, and — once
+          a customer decides to move forward — the hands-on implementation
+          that gets AppSec tooling actually running in their environment.
+          Earlier time spent on the offensive side — penetration testing,
+          vulnerability analysis, and SOC exposure — is what grounds these
+          conversations in how systems actually get compromised, not just
+          how a datasheet reads.
+        </p>
+      </div>
+    </div>
+
+    <section class="about-section wrap" aria-labelledby="about-title">
+      <ul class="about-points reveal">
+        {aboutPoints.map((point) => (
+          <li class="card about-point">
+            <h2 class="about-point__title">{point.label}</h2>
+            <p class="about-point__body">{point.body}</p>
+          </li>
+        ))}
+      </ul>
+
+      <p class="about-hint mono reveal">
+        <span class="about-hint__prompt" aria-hidden="true">$</span>
+        toolkit and certifications live in the terminal — try
+        <a href="/#terminal"><code>skills</code></a> or
+        <a href="/#terminal"><code>certs</code></a>
+      </p>
+    </section>
+
+    <section class="page-cta wrap reveal" aria-labelledby="about-cta-title">
+      <div class="page-cta__body">
+        <h2 class="page-cta__title" id="about-cta-title">{profile.availability}</h2>
+        <p class="page-cta__meta mono">
+          <span>{profile.location}</span>
+          <span class="page-cta__sep" aria-hidden="true">/</span>
+          <span>{profile.remote}</span>
+        </p>
+      </div>
+
+      <div class="page-cta__actions">
+        <a class="btn btn--primary" href="/contact/">Start a conversation</a>
+        <a class="btn btn--ghost" href="/posts/">Read the blog</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-hint {
+    margin-top: 30px;
+    font-size: 13px;
+    color: var(--text-faint);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .about-hint__prompt {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .about-hint code {
+    color: var(--accent-pale);
+    background: rgb(118 146 255 / 12%);
+    border: 1px solid rgb(118 146 255 / 18%);
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+
+  .about-hint a {
+    color: inherit;
+  }
+
+  .about-hint a:hover code {
+    color: #fff;
+    border-color: var(--blue-soft);
+  }
+</style>

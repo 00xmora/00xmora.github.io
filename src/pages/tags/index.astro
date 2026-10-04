@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, groupBy, stats } from '../../lib/blog.js';
+
+const posts = await getPosts();
+const tags = groupBy(posts, 'tags');
+const s = stats(posts);
+---
+
+<BaseLayout title="Tags — Omar Samy" description={`Browse ${s.posts} writeups by tag.`}>
+  <div class="blog">
+    <div class="blog__wrap">
+      <header class="blog-head">
+        <div class="section-tag">
+          <span class="dash" aria-hidden="true"></span>
+          Tags
+        </div>
+        <h1 class="blog-head__title">Browse by tag</h1>
+        <p class="blog-head__lede">
+          {tags.length} tags across {s.posts} writeups — from <code>rce</code> and
+          <code>android</code> to <code>race-condition</code>.
+        </p>
+        <div class="blog-head__meta">
+          <a class="chip mono" href="/posts/">All writeups</a>
+          <a class="chip mono" href="/categories/">Categories</a>
+        </div>
+      </header>
+
+      <ul class="tax-list">
+        {tags.map((tag) => (
+          <li class="tax-item">
+            <a href={`/tags/${tag.slug}/`}>
+              <span>{tag.label}</span>
+              <span class="tax-item__count">{tag.count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts, groupBy } from '../../lib/blog.js';
+import { slugifyTag } from '../../lib/slug.js';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+
+  // One page per tag. Tags are matched case-insensitively so `Android` and
+  // `android` share a single URL, exactly as the old build did.
+  const buckets = new Map();
+  posts.forEach((post) => {
+    post.tags.forEach((tag) => {
+      const slug = slugifyTag(tag);
+      if (!buckets.has(slug)) buckets.set(slug, { label: tag, posts: [] });
+      buckets.get(slug).posts.push(post);
+    });
+  });
+
+  return [...buckets.entries()].map(([slug, bucket]) => ({
+    params: { tag: slug },
+    props: { slug, label: bucket.label, posts: bucket.posts },
+  }));
+}
+
+const { slug, label, posts } = Astro.props;
+const allTags = groupBy(await getPosts(), 'tags');
+const related = allTags.filter((t) => t.slug !== slug).slice(0, 12);
+---
+
+<BaseLayout title={`#${label} — Omar Samy`} description={`Writeups tagged ${label}.`}>
+  <div class="blog">
+    <div class="blog__wrap">
+      <header class="blog-head">
+        <div class="section-tag">
+          <span class="dash" aria-hidden="true"></span>
+          Tag
+        </div>
+        <h1 class="blog-head__title">#{label}</h1>
+        <p class="blog-head__lede">
+          {posts.length} writeup{posts.length === 1 ? '' : 's'} tagged <strong>{label}</strong>.
+        </p>
+        <div class="blog-head__meta">
+          <a class="chip mono" href="/posts/">All writeups</a>
+          <a class="chip mono" href="/tags/">All tags</a>
+        </div>
+      </header>
+
+      <ul class="posts">
+        {posts.map((post) => (
+          <PostCard post={post} />
+        ))}
+      </ul>
+
+      {related.length > 0 && (
+        <div class="tax-related">
+          <p class="tax-related__title mono">related tags</p>
+          <div class="blog-head__meta">
+            {related.map((t) => (
+              <a class="chip mono" href={`/tags/${t.slug}/`}>{t.label}</a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .tax-related {
+    padding: 8px 0 80px;
+  }
+
+  .tax-related__title {
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+</style>

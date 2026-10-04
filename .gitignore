@@ -1,25 +1,11 @@
-# --- top-level build output ---
-_site
-node_modules
+# --- build output ---
+dist/
+.astro/
+node_modules/
+.npm-cache/
 
-# --- portfolio (Vite/React) ---
-portfolio/node_modules
-portfolio/dist
-portfolio/.DS_Store
-
-# --- blog (Jekyll) ---
-blog/.bundle
-blog/vendor
-blog/Gemfile.lock
-blog/.jekyll-cache
-blog/.jekyll-metadata
-blog/_site
-blog/*.gem
-blog/node_modules
-blog/package-lock.json
-blog/_sass/vendors
-blog/assets/js/dist
-blog/*.obsidian
+# --- Astro ---
+.astro/
 
 # --- editors / OS ---
 .idea
@@ -28,3 +14,9 @@ blog/*.obsidian
 !.vscode/extensions.json
 !.vscode/tasks.json
 .DS_Store
+Thumbs.db
+
+# --- local scratch ---
+_preview/
+.archive/
+*.log

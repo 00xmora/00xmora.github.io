@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts, groupByYear, stats } from '../lib/blog.js';
+import { formatDate } from '../lib/slug.js';
+
+const posts = await getPosts();
+const years = groupByYear(posts);
+const s = stats(posts);
+---
+
+<BaseLayout title="Archive — Omar Samy" description={`Every writeup, ${s.posts} posts, grouped by year.`}>
+  <div class="blog">
+    <div class="blog__wrap">
+      <header class="blog-head">
+        <div class="section-tag">
+          <span class="dash" aria-hidden="true"></span>
+          Archive
+        </div>
+        <h1 class="blog-head__title">Everything, by year</h1>
+        <p class="blog-head__lede">{s.posts} writeups since 2024.</p>
+        <div class="blog-head__meta">
+          <a class="chip mono" href="/posts/">All writeups</a>
+          <a class="chip mono" href="/tags/">Tags</a>
+          <a class="chip mono" href="/categories/">Categories</a>
+        </div>
+      </header>
+
+      <div class="archive-body">
+        {years.map(({ year, posts: yearPosts }) => (
+          <>
+            <h2 class="archive-year">{year} — {yearPosts.length} posts</h2>
+            <ul class="archive-list">
+              {yearPosts.map((post) => (
+                <li>
+                  <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
+                  <a href={post.url}>{post.title}</a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .archive-body {
+    padding-bottom: 80px;
+  }
+</style>

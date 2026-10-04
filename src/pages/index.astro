@@ -1,0 +1,105 @@
+---
+/**
+ * Portfolio home.
+ * Sections: hero → quick links → latest writeups → interactive terminal.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Terminal from '../components/Terminal.jsx';
+import { profile } from '../data/profile.js';
+import { formatDate, postUrl, slugify } from '../lib/slug.js';
+import '../styles/hero.css';
+import '../styles/pages.css';
+import '../styles/home.css';
+
+// Skills is deliberately not listed here — the toolkit lives in the terminal
+// (`skills` / `certs`) and on /about, so it does not need its own nav entry.
+const QUICKLINKS = [
+  { href: '/about', tag: '01', title: 'About', body: 'Background, and how I approach the presales side of security.' },
+  { href: '/services', tag: '02', title: 'Services', body: 'What I actually do for you — from architecture to implementation.' },
+  { href: '/experience', tag: '03', title: 'Experience', body: 'Where this comes from — Prosoft, and offensive security before that.' },
+  { href: '/posts/', tag: '04', title: 'Blog', body: 'CTF solutions, vulnerability research, and AppSec challenge breakdowns.' },
+  { href: '/contact', tag: '05', title: 'Contact', body: "Ways to reach me, and what to send if you're evaluating tooling." },
+];
+
+const entries = await getCollection('posts');
+const latest = entries
+  .map((entry) => ({
+    title: entry.data.title,
+    description: entry.data.description || entry.data.summary || '',
+    date: entry.data.date,
+    url: postUrl(slugify(entry.filePath ?? entry.id)),
+    categories: entry.data.categories,
+  }))
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf())
+  .slice(0, 4);
+
+const postCount = entries.length;
+const categoryCount = new Set(
+  entries.flatMap((e) => {
+    const c = e.data.categories;
+    return Array.isArray(c) ? c : c ? [c] : [];
+  }),
+).size;
+---
+
+<BaseLayout
+  title="Omar Samy — Cybersecurity Presales Engineer"
+  description={profile.bio}
+  image="/assets/img/omar.jpg"
+>
+  <Hero />
+
+  <section class="quicklinks" aria-labelledby="quicklinks-title">
+    <div class="wrap">
+      <h2 class="sr-only" id="quicklinks-title">Explore the site</h2>
+      <div class="quicklinks__grid">
+        {QUICKLINKS.map((l) => (
+          <a class="quicklink" href={l.href}>
+            <span class="quicklink__tag mono">{l.tag}</span>
+            <h3>{l.title}</h3>
+            <p>{l.body}</p>
+            <span class="quicklink__arrow" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="latest" aria-labelledby="latest-title">
+    <div class="wrap">
+      <div class="latest__head">
+        <div>
+          <div class="section-tag">
+            <span class="dash" aria-hidden="true"></span>
+            Research
+          </div>
+          <h2 class="latest__heading" id="latest-title">Latest writeups</h2>
+          <p class="latest__sub">
+            {postCount} published writeups across {categoryCount} topics — CTF solutions, code review
+            challenges, and vulnerability research from real targets.
+          </p>
+        </div>
+        <a class="btn btn--ghost btn--sm" href="/posts/">Browse all</a>
+      </div>
+
+      <ul class="latest__grid">
+        {latest.map((p) => (
+          <li class="latest__item">
+            <a class="card latest__card" href={p.url}>
+              <time class="latest__date mono" datetime={p.date.toISOString()}>
+                {formatDate(p.date)}
+              </time>
+              <h3 class="latest__title">{p.title}</h3>
+              <p class="latest__desc">{p.description}</p>
+              <span class="latest__cta mono">read →</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Terminal client:load />
+</BaseLayout>

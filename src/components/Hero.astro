@@ -1,0 +1,72 @@
+---
+/**
+ * Hero — the first thing anyone sees.
+ * The role line types itself out; that is the only JS here, and it no-ops
+ * under prefers-reduced-motion.
+ */
+import { profile } from '../data/profile.js';
+---
+
+<section id="top" class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <div class="hero__status mono">
+        <span class="hero__dot" aria-hidden="true"></span>
+        {profile.availability}
+      </div>
+
+      <h1 class="hero__name"><span class="grad-text">Omar</span> Samy</h1>
+
+      <p class="hero__role mono" aria-label={profile.role}>
+        <span aria-hidden="true" data-typewriter={profile.role}></span><span class="hero__caret" aria-hidden="true"></span>
+      </p>
+
+      <p class="hero__lede">{profile.bio}</p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href={`mailto:${profile.email}`}>Start a conversation</a>
+        <a class="btn btn--ghost" href="/services/">See how I can help</a>
+      </div>
+
+      <div class="hero__meta mono">
+        <span>{profile.location}</span>
+        <span class="hero__meta-sep" aria-hidden="true">/</span>
+        <span>{profile.remote}</span>
+        <span class="hero__meta-sep" aria-hidden="true">/</span>
+        <a href="#terminal" class="hero__meta-link">try `help` in the terminal ↓</a>
+      </div>
+    </div>
+
+    <div class="hero__photo-col">
+      <div class="hero__frame">
+        <span class="hero__corner hero__corner--tl" aria-hidden="true"></span>
+        <span class="hero__corner hero__corner--tr" aria-hidden="true"></span>
+        <span class="hero__corner hero__corner--bl" aria-hidden="true"></span>
+        <span class="hero__corner hero__corner--br" aria-hidden="true"></span>
+        <img src="/assets/img/omar.jpg" alt="Portrait of Omar Samy" width="680" height="850" />
+      </div>
+      <div class="hero__caption mono">SUBJECT: omar.samy — ROLE: presales / appsec</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const target = document.querySelector('[data-typewriter]');
+  if (target) {
+    const text = target.dataset.typewriter || '';
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduce) {
+      target.textContent = text;
+    } else {
+      let i = 0;
+      setTimeout(() => {
+        const timer = setInterval(() => {
+          i += 1;
+          target.textContent = text.slice(0, i);
+          if (i >= text.length) clearInterval(timer);
+        }, 38);
+      }, 420);
+    }
+  }
+</script>

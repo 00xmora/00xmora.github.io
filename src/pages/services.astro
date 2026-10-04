@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profile, services } from '../data/profile.js';
+---
+
+<BaseLayout
+  title="Services — Omar Samy"
+  description="Solution architecture, proof-of-concept engineering, implementation and DevSecOps integration, and technical advisory for application security evaluations."
+>
+  <div class="page">
+    <div class="page-head">
+      <div class="wrap">
+        <p class="page-head__eyebrow">
+          <span class="dash" aria-hidden="true"></span>
+          Services
+        </p>
+
+        <h1 id="services-title">What I bring to your evaluation</h1>
+
+        <p class="page-head__lede">
+          Work that's judged on whether your team can make a confident decision
+          and get the product running in production afterward — not on how
+          polished the deck looked.
+        </p>
+      </div>
+    </div>
+
+    <section class="services-section wrap" aria-labelledby="services-title">
+      <ul class="services-grid reveal">
+        {services.map((service) => (
+          <li class="card service-card">
+            <span class="chip mono service-card__tag">{service.tag}</span>
+            <h2 class="service-card__title">{service.title}</h2>
+            <p class="service-card__body">{service.body}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="page-cta wrap reveal" aria-labelledby="services-cta-title">
+      <div class="page-cta__body">
+        <h2 class="page-cta__title" id="services-cta-title">{profile.availability}</h2>
+        <p class="page-cta__meta mono">
+          <span>{profile.location}</span>
+          <span class="page-cta__sep" aria-hidden="true">/</span>
+          <span>{profile.remote}</span>
+        </p>
+      </div>
+
+      <div class="page-cta__actions">
+        <a class="btn btn--primary" href="/contact/">Start a conversation</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

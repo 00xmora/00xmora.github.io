@@ -1,0 +1,25 @@
+---
+/**
+ * /blog/ → /posts/
+ * The blog index used to live here; the writeups now live under /posts/.
+ * Emitted as a redirect stub so existing links and bookmarks still land right.
+ */
+const to = '/posts/';
+const target = new URL(to, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting to {to}</title>
+    <meta http-equiv="refresh" content={`0;url=${to}`} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={target} />
+  </head>
+  <body>
+    <p>
+      The blog moved. <a href={to}>Continue to the writeups</a>
+    </p>
+  </body>
+</html>

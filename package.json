@@ -1,0 +1,22 @@
+{
+  "name": "00xmora-github-io",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Omar Samy — cybersecurity presales portfolio and technical writeups. One Astro site.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/react": "^5.0.0",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.14.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  }
+}

@@ -1,0 +1,163 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, isoDate, slugifyTag } from '../../lib/slug.js';
+import { getPosts, readingTime } from '../../lib/blog.js';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+
+  return posts.map((post, index) => ({
+    params: { slug: post.slug },
+    props: {
+      post,
+      body: post.entry.body ?? '',
+      prev: posts[index + 1] ? { title: posts[index + 1].title, url: posts[index + 1].url } : null,
+      next: posts[index - 1] ? { title: posts[index - 1].title, url: posts[index - 1].url } : null,
+    },
+  }));
+}
+
+const { post, body, prev, next } = Astro.props;
+
+const { Content, headings } = await render(post.entry);
+
+// Only h2/h3 make it into the table of contents — deeper levels get noisy.
+const toc = (headings ?? []).filter((h) => h.depth === 2 || h.depth === 3);
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: post.title,
+  description: post.description,
+  datePublished: isoDate(post.date),
+  author: { '@type': 'Person', name: 'Omar Samy', url: 'https://00xmora.github.io' },
+  publisher: { '@type': 'Person', name: 'Omar Samy' },
+  mainEntityOfPage: `https://00xmora.github.io${post.url}`,
+};
+---
+
+<BaseLayout
+  title={`${post.title} — Omar Samy`}
+  description={post.description || post.title}
+  image={post.image}
+  type="article"
+>
+  <article class="article">
+    <div class="article__grid">
+      <div class="article__main">
+        <nav class="article__crumbs" aria-label="Breadcrumb">
+          <a href="/">home</a>
+          <span aria-hidden="true">/</span>
+          <a href="/posts/">blog</a>
+          {post.categories.length > 0 && (
+            <>
+              <span aria-hidden="true">/</span>
+              <span>{post.categories.join(', ')}</span>
+            </>
+          )}
+        </nav>
+
+        <h1 class="article__title">{post.title}</h1>
+
+        <div class="article__meta">
+          <time datetime={isoDate(post.date)}>{formatDate(post.date)}</time>
+          <span aria-hidden="true">·</span>
+          <span>{readingTime(body)}</span>
+          {post.tags.length > 0 && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{post.tags.length} tags</span>
+            </>
+          )}
+        </div>
+
+        {post.image && <img class="article__cover" src={post.image} alt="" width="1200" height="630" />}
+
+        <div class="prose">
+          <Content />
+        </div>
+
+        {post.tags.length > 0 && (
+          <div class="article__tags">
+            {post.tags.map((tag) => (
+              <a class="chip mono" href={`/tags/${slugifyTag(tag)}/`}>#{tag}</a>
+            ))}
+          </div>
+        )}
+
+        {(prev || next) && (
+          <nav class="post-nav" aria-label="More posts">
+            {prev ? (
+              <a href={prev.url}>
+                <span class="post-nav__label">← older</span>
+                <span class="post-nav__title">{prev.title}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+            {next ? (
+              <a href={next.url} class="post-nav__next">
+                <span class="post-nav__label">newer →</span>
+                <span class="post-nav__title">{next.title}</span>
+              </a>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )}
+      </div>
+
+      {toc.length > 2 && (
+        <aside class="toc" aria-label="Table of contents">
+          <p class="toc__title">On this page</p>
+          <ul>
+            {toc.map((h) => (
+              <li class={`toc-h${h.depth}`}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+
+  <script>
+    // Highlight the TOC entry for the section currently on screen.
+    const links = Array.from(document.querySelectorAll('.toc a'));
+    if (links.length) {
+      const targets = links
+        .map((a) => ({ a, el: document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1))) }))
+        .filter((t) => t.el);
+
+      if (targets.length) {
+        const setActive = () => {
+          // Nothing is "current" until the reader actually reaches the first
+          // section — avoids highlighting the first item on load.
+          let active = null;
+          for (const t of targets) {
+            if (t.el.getBoundingClientRect().top <= 140) active = t;
+          }
+          targets.forEach((t) => t.a.classList.toggle('is-active', t === active));
+        };
+
+        let raf = 0;
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+              raf = 0;
+              setActive();
+            });
+          },
+          { passive: true },
+        );
+        setActive();
+      }
+    }
+  </script>
+</BaseLayout>
